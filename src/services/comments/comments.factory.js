@@ -4,9 +4,9 @@ import { commentsTable } from './comments.shared.js'
 
 export function generateComment(attributes = {}) {
   return {
-    id: faker.datatype.uuid(),
+    id: faker.string.uuid(),
     morph_type: faker.helpers.arrayElement(['posts', 'pages']),
-    morph_id: faker.datatype.uuid(),
+    morph_id: faker.string.uuid(),
     text: faker.lorem.sentence(),
     ...attributes
   }

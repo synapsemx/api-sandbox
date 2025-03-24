@@ -8,3 +8,15 @@ export const logger = createLogger({
   format: format.combine(format.splat(), format.simple()),
   transports: [new transports.Console()]
 })
+
+const dbLoggerFilename = process.env.DB_LOGGER_FILENAME || 'query.log'
+
+export const dbLogger = createLogger({
+  level: 'info',
+  format: format.combine(format.timestamp(), format.json()),
+  transports: [
+    new transports.File({
+      filename: dbLoggerFilename
+    })
+  ]
+})

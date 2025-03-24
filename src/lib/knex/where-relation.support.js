@@ -32,7 +32,7 @@ class WhereRelationSupport {
     for (const [relationName, relationQuery] of Object.entries(
       whereRelationDefinition
     )) {
-      this.#applyRelationCondition(builder, relationName, relationQuery)
+      this.applyRelationCondition(builder, relationName, relationQuery)
     }
   }
 
@@ -41,13 +41,13 @@ class WhereRelationSupport {
    * @param {string} relationName
    * @param {Record<string, unknown>} relationQuery
    */
-  #applyRelationCondition(builder, relationName, relationQuery) {
+  applyRelationCondition(builder, relationName, relationQuery) {
     const relationDefinition = this.relationships[relationName]
     const relatedTableName = getServiceTableName(relationDefinition.service)
 
     const subquery = this.knex.from(relatedTableName).select('*')
 
-    this.#addRelationJoinCondition(subquery, relationDefinition)
+    this.addRelationJoinCondition(subquery, relationDefinition)
     this.knexify(subquery, relationQuery)
 
     builder.whereExists(subquery)
@@ -57,11 +57,11 @@ class WhereRelationSupport {
    * @param {QueryBuilder} subquery
    * @param {RelationshipDefinition} relationDefinition
    */
-  #addRelationJoinCondition(subquery, relationDefinition) {
+  addRelationJoinCondition(subquery, relationDefinition) {
     const handlers = {
-      belongsTo: this.#addBelongsToCondition.bind(this),
-      hasMany: this.#addHasManyCondition.bind(this),
-      manyToMany: this.#addManyToManyCondition.bind(this)
+      belongsTo: this.addBelongsToCondition.bind(this),
+      hasMany: this.addHasManyCondition.bind(this),
+      manyToMany: this.addManyToManyCondition.bind(this)
     }
 
     const handler = handlers[relationDefinition.type]
@@ -77,7 +77,7 @@ class WhereRelationSupport {
    * @param {QueryBuilder} subquery
    * @param {RelationshipDefinition} relationDefinition
    */
-  #addBelongsToCondition(subquery, relationDefinition) {
+  addBelongsToCondition(subquery, relationDefinition) {
     const { mainTableForeignKey, relatedTablePrimaryKey } =
       buildRelationColumns(this.app, relationDefinition, this.selfTableName)
 
@@ -88,7 +88,7 @@ class WhereRelationSupport {
    * @param {QueryBuilder} subquery
    * @param {RelationshipDefinition} relationDefinition
    */
-  #addHasManyCondition(subquery, relationDefinition) {
+  addHasManyCondition(subquery, relationDefinition) {
     const { mainTablePrimaryKey, relatedTableForeignKey } =
       buildRelationColumns(this.app, relationDefinition, this.selfTableName)
 
@@ -99,7 +99,7 @@ class WhereRelationSupport {
    * @param {QueryBuilder} subquery
    * @param {RelationshipDefinition} relationDefinition
    */
-  #addManyToManyCondition(subquery, relationDefinition) {
+  addManyToManyCondition(subquery, relationDefinition) {
     const {
       relatedTablePrimaryKey,
       mainTablePrimaryKey,

@@ -11,7 +11,7 @@ import { tagsPath } from '../tags/tags.shared.js'
 // Main data model schema
 export const postsSchema = Type.Object(
   {
-    id: Type.Number(),
+    id: Type.String({ format: 'uuid' }),
     category_id: Type.String({ format: 'uuid' }),
     content: Type.String()
   },
@@ -52,7 +52,7 @@ export const postsQuerySchema = Type.Intersect(
     // Add additional query properties here
     Type.Object({}, { additionalProperties: false })
   ],
-  { additionalProperties: false }
+  { additionalProperties: true }
 )
 export const postsQueryValidator = getValidator(
   postsQuerySchema,

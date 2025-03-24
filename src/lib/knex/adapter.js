@@ -60,15 +60,17 @@ class KnexAdapter extends BaseKnexAdapter {
     const { name: tableName, id: primaryKey } = this.getOptions(params)
 
     const { filters, query, joinRelation, whereRelation } =
-      this.#filterQueryWithRelations(params)
+      this.filterQueryWithRelations(params)
 
     const builder = this.db(params)
 
-    this.#selectColumns(builder, filters, tableName, primaryKey)
-    this.#addRelationJoins(builder, joinRelation)
-    this.#applyWhereConditionsForRelations(builder, whereRelation, params)
-    this.#applyQueryFilters(builder, query, filters)
-    this.#applySortOrders(builder, filters)
+    this.selectColumns(builder, filters, tableName, primaryKey)
+    // this.addRelationJoins(builder, joinRelation)
+    this.applyWhereConditionsForRelations(builder, whereRelation, params)
+    this.applyQueryFilters(builder, query, filters)
+    this.applySortOrders(builder, filters)
+
+    console.log(builder.toQuery())
 
     return builder
   }
@@ -76,7 +78,7 @@ class KnexAdapter extends BaseKnexAdapter {
   /**
    * @param {Object} params
    */
-  #filterQueryWithRelations(params) {
+  filterQueryWithRelations(params) {
     const query = { ...(params.query || {}) }
     const joinRelation = query.$joinRelation || []
     const whereRelation = query.$whereRelation || {}
@@ -88,7 +90,7 @@ class KnexAdapter extends BaseKnexAdapter {
 
     return {
       ...filtered,
-      query: this.#addTablePrefixToQuery(filtered.query),
+      query: this.addTablePrefixToQuery(filtered.query),
       joinRelation,
       whereRelation
     }
@@ -100,7 +102,7 @@ class KnexAdapter extends BaseKnexAdapter {
    * @param {string} tableName
    * @param {string} primaryKey
    */
-  #selectColumns(builder, filters, tableName, primaryKey) {
+  selectColumns(builder, filters, tableName, primaryKey) {
     const hasCustomSelect = Array.isArray(filters.$select)
 
     if (hasCustomSelect) {
@@ -125,10 +127,10 @@ class KnexAdapter extends BaseKnexAdapter {
    * @param {Object} query
    * @param {Object} filters
    */
-  #applyQueryFilters(builder, query, filters) {
+  applyQueryFilters(builder, query, filters) {
     const combined = {
       ...query,
-      ...pick(filters, '$and', '$or')
+      ...pick(filters, ['$and', '$or'])
     }
 
     this.knexify(builder, combined)
@@ -138,7 +140,7 @@ class KnexAdapter extends BaseKnexAdapter {
    * @param {QueryBuilder} builder
    * @param {Object} filters
    */
-  #applySortOrders(builder, filters) {
+  applySortOrders(builder, filters) {
     const sort = filters.$sort
 
     if (!sort) return
@@ -154,7 +156,7 @@ class KnexAdapter extends BaseKnexAdapter {
    * @param {QueryBuilder} builder
    * @param {string[]} relationKeys
    */
-  #addRelationJoins(builder, relationKeys = []) {
+  addRelationJoins(builder, relationKeys = []) {
     const relationships = this.relationships
 
     for (const relationKey of relationKeys) {
@@ -189,7 +191,7 @@ class KnexAdapter extends BaseKnexAdapter {
    * @param {Object} query
    * @returns {Object}
    */
-  #addTablePrefixToQuery(query) {
+  addTablePrefixToQuery(query) {
     const table = this.options.name
     const output = {}
 
@@ -228,7 +230,7 @@ class KnexAdapter extends BaseKnexAdapter {
    * @param {Record<string, unknown>} whereRelation
    * @param {Record<string, unknown>} params
    */
-  #applyWhereConditionsForRelations(builder, whereRelation, params) {
+  applyWhereConditionsForRelations(builder, whereRelation, params) {
     const { Model } = this.getOptions(params)
 
     const relationSupport = new WhereRelationSupport(

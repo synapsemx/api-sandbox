@@ -7,6 +7,7 @@ import { getServiceTableName } from '../../utils/relationships.js'
  */
 export const buildRelationColumns = (app, definition, mainTableName) => {
   const relatedTableName = getServiceTableName(app, definition.service)
+
   const { pivot, primaryKey, relatedKey, foreignKey } = definition
 
   /**
@@ -33,6 +34,8 @@ export const buildRelationColumns = (app, definition, mainTableName) => {
     columns.mainTableForeignKey = null
     columns.relatedTableForeignKey = null
   }
+
+  console.log(columns)
 
   return columns
 }

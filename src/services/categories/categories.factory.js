@@ -4,7 +4,7 @@ import { categoriesTable } from './categories.shared.js'
 
 export function generateCategory(attributes = {}) {
   return {
-    id: faker.datatype.uuid(),
+    id: faker.string.uuid(),
     name: faker.commerce.department(),
     ...attributes
   }

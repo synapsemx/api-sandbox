@@ -4,9 +4,9 @@ import { tagPostsTable } from './tag-posts.shared.js'
 
 export function generateTagPost(attributes = {}) {
   return {
-    id: faker.datatype.uuid(),
-    tag_id: faker.datatype.uuid(),
-    post_id: faker.datatype.uuid(),
+    id: faker.string.uuid(),
+    tag_id: faker.string.uuid(),
+    post_id: faker.string.uuid(),
     ...attributes
   }
 }

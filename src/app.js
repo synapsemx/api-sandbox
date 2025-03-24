@@ -18,6 +18,7 @@ import processIncludeQuery from './hooks/process-include.js'
 import { logger } from './logger.js'
 import { postgresql } from './postgresql.js'
 import { services } from './services/index.js'
+import setupQueryLogger from './utils/setup-query-logger.js'
 
 const app = express(feathers())
 
@@ -63,5 +64,7 @@ app.hooks({
   setup: [],
   teardown: []
 })
+
+setupQueryLogger(app)
 
 export { app }

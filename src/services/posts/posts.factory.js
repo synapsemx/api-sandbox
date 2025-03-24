@@ -4,8 +4,8 @@ import { postsTable } from './posts.shared.js'
 
 export function generatePost(attributes = {}) {
   return {
-    id: faker.datatype.number({ min: 1 }),
-    category_id: faker.datatype.uuid(),
+    id: faker.string.uuid(),
+    category_id: faker.string.uuid(),
     content: faker.lorem.paragraph(),
     ...attributes
   }

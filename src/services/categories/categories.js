@@ -13,7 +13,11 @@ import {
   categoriesResolver,
   relationships
 } from './categories.schema.js'
-import { categoriesMethods, categoriesPath } from './categories.shared.js'
+import {
+  categoriesMethods,
+  categoriesPath,
+  categoriesTable
+} from './categories.shared.js'
 
 export * from './categories.class.js'
 export * from './categories.schema.js'
@@ -23,7 +27,7 @@ export const categories = (app) => {
   // Register our service on the Feathers application
   app.use(
     categoriesPath,
-    new CategoriesService(getOptions(app, relationships)),
+    new CategoriesService(getOptions(app, relationships, categoriesTable)),
     {
       // A list of all methods this service exposes externally
       methods: categoriesMethods,

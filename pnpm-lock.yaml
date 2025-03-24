@@ -57,6 +57,9 @@ importers:
         specifier: ^3.17.0
         version: 3.17.0
     devDependencies:
+      '@faker-js/faker':
+        specifier: ^9.6.0
+        version: 9.6.0
       '@feathersjs/cli':
         specifier: 5.0.33
         version: 5.0.33
@@ -278,6 +281,10 @@ packages:
     engines: {node: '>=18'}
     cpu: [x64]
     os: [win32]
+
+  '@faker-js/faker@9.6.0':
+    resolution: {integrity: sha512-3vm4by+B5lvsFPSyep3ELWmZfE3kicDtmemVpuwl1yH7tqtnHdsA6hG8fbXedMVdkzgtvzWoRgjSB4Q+FHnZiw==}
+    engines: {node: '>=18.0.0', npm: '>=9.0.0'}
 
   '@featherscloud/pinion@0.5.5':
     resolution: {integrity: sha512-YgjX6DglYgaHmpona0lHfY4t92CiPH9xGowYR/dm2A5bghSx/w83SVnVvV9dqeJruXYAVNhzzmLYcVjUgpTwBA==}
@@ -2068,6 +2075,8 @@ snapshots:
 
   '@esbuild/win32-x64@0.25.1':
     optional: true
+
+  '@faker-js/faker@9.6.0': {}
 
   '@featherscloud/pinion@0.5.5':
     dependencies:

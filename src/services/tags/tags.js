@@ -3,6 +3,7 @@
 import { hooks as schemaHooks } from '@feathersjs/schema'
 import { TagsService, getOptions } from './tags.class.js'
 import {
+  relationships,
   tagsDataResolver,
   tagsDataValidator,
   tagsExternalResolver,
@@ -12,7 +13,7 @@ import {
   tagsQueryValidator,
   tagsResolver
 } from './tags.schema.js'
-import { tagsMethods, tagsPath } from './tags.shared.js'
+import { tagsMethods, tagsPath, tagsTable } from './tags.shared.js'
 
 export * from './tags.class.js'
 export * from './tags.schema.js'
@@ -20,12 +21,16 @@ export * from './tags.schema.js'
 // A configure function that registers the service and its hooks via `app.configure`
 export const tags = (app) => {
   // Register our service on the Feathers application
-  app.use(tagsPath, new TagsService(getOptions(app)), {
-    // A list of all methods this service exposes externally
-    methods: tagsMethods,
-    // You can add additional custom events to be sent to clients here
-    events: []
-  })
+  app.use(
+    tagsPath,
+    new TagsService(getOptions(app, relationships, tagsTable)),
+    {
+      // A list of all methods this service exposes externally
+      methods: tagsMethods,
+      // You can add additional custom events to be sent to clients here
+      events: []
+    }
+  )
   // Initialize hooks
   app.service(tagsPath).hooks({
     around: {

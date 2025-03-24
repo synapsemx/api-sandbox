@@ -6,12 +6,13 @@ export class TagsService extends KnexService {}
 /**
  * @param {import('@feathersjs/feathers').Application} app
  * @param {import('@types/relationships').RelationshipsMap} relationships
+ * @param {string} tableName
  */
-export const getOptions = (app, relationships) => {
+export const getOptions = (app, relationships, tableName) => {
   return {
     paginate: app.get('paginate'),
     Model: app.get('postgresqlClient'),
-    name: 'tags',
+    name: tableName,
     relationships
   }
 }

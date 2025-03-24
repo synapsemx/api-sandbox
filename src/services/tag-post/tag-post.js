@@ -13,7 +13,7 @@ import {
   tagPostQueryValidator,
   tagPostResolver
 } from './tag-post.schema.js'
-import { tagPostMethods, tagPostPath } from './tag-post.shared.js'
+import { tagPostMethods, tagPostPath, tagPostTable } from './tag-post.shared.js'
 
 export * from './tag-post.class.js'
 export * from './tag-post.schema.js'
@@ -21,7 +21,7 @@ export * from './tag-post.schema.js'
 // A configure function that registers the service and its hooks via `app.configure`
 export const tagPost = (app) => {
   // Register our service on the Feathers application
-  app.use(tagPostPath, new TagPostService(getOptions(app)), {
+  app.use(tagPostPath, new TagPostService(getOptions(app, {}, tagPostTable)), {
     // A list of all methods this service exposes externally
     methods: tagPostMethods,
     // You can add additional custom events to be sent to clients here

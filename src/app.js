@@ -14,6 +14,7 @@ import socketio from '@feathersjs/socketio'
 import { channels } from './channels.js'
 import { configurationValidator } from './configuration.js'
 import { logError } from './hooks/log-error.js'
+import processIncludeQuery from './hooks/process-include.js'
 import { logger } from './logger.js'
 import { postgresql } from './postgresql.js'
 import { services } from './services/index.js'
@@ -51,7 +52,9 @@ app.hooks({
   around: {
     all: [logError]
   },
-  before: {},
+  before: {
+    all: [processIncludeQuery]
+  },
   after: {},
   error: {}
 })

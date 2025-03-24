@@ -16,7 +16,7 @@ jobs:
     timeout-minutes: 15
     strategy:
       matrix:
-        node-version: [20]
+        node-version: [22]
 
     steps:
       - name: Checkout code
@@ -27,21 +27,19 @@ jobs:
         with:
           node-version: ${{ matrix.node-version }}
 
-      - name: Install Yarn
-        run: corepack enable
+      - name: Install pnpm
+        run: npm install -g pnpm
 
-      - name: Cache dependencies
+      - name: Cache pnpm store
         uses: actions/cache@v4
         with:
-          path: |
-            node_modules
-            /home/runner/.cache/yarn
-          key: ${{ runner.os }}-yarn-${{ hashFiles('yarn.lock') }}
+          path: ~/.pnpm-store
+          key: ${{ runner.os }}-pnpm-${{ hashFiles('pnpm-lock.yaml') }}
           restore-keys: |
-            ${{ runner.os }}-yarn-
+            ${{ runner.os }}-pnpm-
 
       - name: Install dependencies
-        run: yarn install
+        run: pnpm install
         working-directory: .
 
   tests:
@@ -52,7 +50,7 @@ jobs:
     if: github.event.pull_request.draft == false
     strategy:
       matrix:
-        node-version: [20]
+        node-version: [22]
     services:
       postgres:
         image: postgres:latest
@@ -86,16 +84,14 @@ jobs:
 
       - uses: actions/cache@v4
         with:
-          path: |
-            node_modules
-            /home/runner/.cache/yarn
-          key: ${{ runner.os }}-yarn-${{ hashFiles('yarn.lock') }}
+          path: ~/.pnpm-store
+          key: ${{ runner.os }}-pnpm-${{ hashFiles('pnpm-lock.yaml') }}
 
-      - name: Install Yarn
-        run: corepack enable
+      - name: Install pnpm
+        run: npm install -g pnpm
 
       - name: Install dependencies
-        run: yarn install
+        run: pnpm install
         working-directory: .
 
       - name: Run Tests with Coverage
@@ -106,8 +102,8 @@ jobs:
           REDIS_PORT: "6379"
           PORT: "9999"
         run: |
-          yarn migrate:fresh
-          yarn pr-test
+          pnpm run migrate:fresh
+          pnpm run pr-test
 
   finish:
     name: Pull Request Verify Check

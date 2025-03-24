@@ -35,7 +35,7 @@
     "dev": "nodemon src/",
     "prettier": "npx prettier \"**/*.js\" --write",
     "test": "dotenv -e .env.test pnpm migrate:fresh && pnpm vitest",
-    "test:ci": "pnpm migrate:fresh && pnpm vitest --coverage --silet",
+    "test:ci": "pnpm migrate:fresh && pnpm vitest --coverage --silent",
     "vitest": "vitest",
     "bundle:client": "pnpm pack --pack-destination ./public",
     "migrate": "knex migrate:latest",

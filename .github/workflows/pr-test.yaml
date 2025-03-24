@@ -42,7 +42,7 @@ jobs:
 
       - name: Install dependencies
         run: yarn install
-        working-directory: api
+        working-directory: .
 
   tests:
     name: Run Tests
@@ -96,7 +96,7 @@ jobs:
 
       - name: Install dependencies
         run: yarn install
-        working-directory: api
+        working-directory: .
 
       - name: Run Tests with Coverage
         env:

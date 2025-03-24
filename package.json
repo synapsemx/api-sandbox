@@ -36,6 +36,7 @@
     "prettier": "npx prettier \"**/*.js\" --write",
     "test": "dotenv -e .env.test pnpm migrate:fresh && pnpm vitest",
     "vitest": "vitest",
+    "ci": "vitest --silent --coverage",
     "bundle:client": "pnpm pack --pack-destination ./public",
     "migrate": "knex migrate:latest",
     "migrate:make": "knex migrate:make -x mjs",

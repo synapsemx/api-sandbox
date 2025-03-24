@@ -95,6 +95,7 @@ jobs:
         working-directory: .
 
       - name: Run Tests with Coverage
+        working-directory: .
         env:
           NODE_ENV: "test"
           POSTGRES_CONNECTION_STRING: "postgres://postgres:postgres@localhost:5432/testdb"
@@ -102,8 +103,8 @@ jobs:
           REDIS_PORT: "6379"
           PORT: "9999"
         run: |
-          pnpm run migrate:fresh
-          pnpm run pr-test
+          pnpm migrate:fresh
+          pnpm ci
 
   finish:
     name: Pull Request Verify Check

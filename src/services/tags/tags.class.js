@@ -1,4 +1,4 @@
-import { KnexService } from '@feathersjs/knex'
+import KnexService from '../../lib/knex/service.js'
 
 // By default calls the standard Knex adapter service methods but can be customized with your own functionality.
 export class TagsService extends KnexService {}
@@ -10,6 +10,7 @@ export class TagsService extends KnexService {}
  */
 export const getOptions = (app, relationships, tableName) => {
   return {
+    app,
     paginate: app.get('paginate'),
     Model: app.get('postgresqlClient'),
     name: tableName,

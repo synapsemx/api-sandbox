@@ -3,7 +3,7 @@ import { relationshipTypes } from '../src/utils/relationships.js'
 type RelationshipType = (typeof RELATIONSHIP_TYPES)[keyof typeof RELATIONSHIP_TYPES]
 
 type BaseRelationship = {
-  type: RelationshipType
+  type: string
   service: string,
   required?: boolean
 }

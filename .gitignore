@@ -119,6 +119,3 @@ postgres-data/
 .yarn/install-state.gz
 .pnp.*
 .sqlite
-
-lib/
-

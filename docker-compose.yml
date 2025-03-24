@@ -1,0 +1,26 @@
+version: "3.1"
+
+services:
+  db:
+    container_name: api-sandbox-db
+    image: postgres:15.3-alpine3.18
+    restart: always
+    env_file:
+      - .env
+    volumes:
+      - ./postgres-data:/var/lib/postgresql/data
+    ports:
+      - 5432:5432
+
+  adminer:
+    image: adminer
+    restart: always
+    ports:
+      - 808:8080
+
+  redis:
+    container_name: api-sandbox-redis
+    image: redis
+    command: redis-server --maxmemory-policy noeviction
+    ports:
+      - 6379:6379

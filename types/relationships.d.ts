@@ -4,7 +4,8 @@ type RelationshipType = (typeof RELATIONSHIP_TYPES)[keyof typeof RELATIONSHIP_TY
 
 type BaseRelationship = {
   type: RelationshipType
-  service: string
+  service: string,
+  required?: boolean
 }
 
 type BelongsToRelationship = BaseRelationship & {

@@ -1,7 +1,9 @@
 // // For more information about this file see https://dove.feathersjs.com/guides/cli/service.schemas.html
 import { resolve } from '@feathersjs/schema'
 import { Type, getValidator, querySyntax } from '@feathersjs/typebox'
+import { relationshipTypes } from '../../utils/relationships.js'
 import { dataValidator, queryValidator } from '../../validators.js'
+import { postsPath } from '../posts/posts.shared.js'
 
 // Main data model schema
 export const categoriesSchema = Type.Object(
@@ -54,3 +56,13 @@ export const categoriesQueryValidator = getValidator(
   queryValidator
 )
 export const categoriesQueryResolver = resolve({})
+
+/**
+ * @type {import('@types/relationships').RelationshipsMap}
+ */
+export const relationships = {
+  posts: {
+    type: relationshipTypes.hasMany,
+    service: postsPath
+  }
+}

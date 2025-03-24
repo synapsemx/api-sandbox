@@ -1,26 +1,24 @@
 // For more information about this file see https://dove.feathersjs.com/guides/cli/service.html
 
 import { hooks as schemaHooks } from '@feathersjs/schema'
-import {
-  tagsDataValidator,
-  tagsPatchValidator,
-  tagsQueryValidator,
-  tagsResolver,
-  tagsExternalResolver,
-  tagsDataResolver,
-  tagsPatchResolver,
-  tagsQueryResolver
-} from './tags.schema.js'
 import { TagsService, getOptions } from './tags.class.js'
-
-export const tagsPath = 'tags'
-export const tagsMethods = ['find', 'get', 'create', 'patch', 'remove']
+import {
+  tagsDataResolver,
+  tagsDataValidator,
+  tagsExternalResolver,
+  tagsPatchResolver,
+  tagsPatchValidator,
+  tagsQueryResolver,
+  tagsQueryValidator,
+  tagsResolver
+} from './tags.schema.js'
+import { tagsMethods, tagsPath } from './tags.shared.js'
 
 export * from './tags.class.js'
 export * from './tags.schema.js'
 
 // A configure function that registers the service and its hooks via `app.configure`
-export const tags = app => {
+export const tags = (app) => {
   // Register our service on the Feathers application
   app.use(tagsPath, new TagsService(getOptions(app)), {
     // A list of all methods this service exposes externally
@@ -31,14 +29,26 @@ export const tags = app => {
   // Initialize hooks
   app.service(tagsPath).hooks({
     around: {
-      all: [schemaHooks.resolveExternal(tagsExternalResolver), schemaHooks.resolveResult(tagsResolver)]
+      all: [
+        schemaHooks.resolveExternal(tagsExternalResolver),
+        schemaHooks.resolveResult(tagsResolver)
+      ]
     },
     before: {
-      all: [schemaHooks.validateQuery(tagsQueryValidator), schemaHooks.resolveQuery(tagsQueryResolver)],
+      all: [
+        schemaHooks.validateQuery(tagsQueryValidator),
+        schemaHooks.resolveQuery(tagsQueryResolver)
+      ],
       find: [],
       get: [],
-      create: [schemaHooks.validateData(tagsDataValidator), schemaHooks.resolveData(tagsDataResolver)],
-      patch: [schemaHooks.validateData(tagsPatchValidator), schemaHooks.resolveData(tagsPatchResolver)],
+      create: [
+        schemaHooks.validateData(tagsDataValidator),
+        schemaHooks.resolveData(tagsDataResolver)
+      ],
+      patch: [
+        schemaHooks.validateData(tagsPatchValidator),
+        schemaHooks.resolveData(tagsPatchResolver)
+      ],
       remove: []
     },
     after: {

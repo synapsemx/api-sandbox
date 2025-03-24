@@ -1,7 +1,12 @@
 // // For more information about this file see https://dove.feathersjs.com/guides/cli/service.schemas.html
 import { resolve } from '@feathersjs/schema'
 import { Type, getValidator, querySyntax } from '@feathersjs/typebox'
+import { relationshipTypes } from '../../utils/relationships.js'
 import { dataValidator, queryValidator } from '../../validators.js'
+import { categoriesPath } from '../categories/categories.shared.js'
+import { commentsPath } from '../comments/comments.shared.js'
+import { tagPostPath } from '../tag-post/tag-post.shared.js'
+import { tagsPath } from '../tags/tags.shared.js'
 
 // Main data model schema
 export const postsSchema = Type.Object(
@@ -54,3 +59,26 @@ export const postsQueryValidator = getValidator(
   queryValidator
 )
 export const postsQueryResolver = resolve({})
+
+/**
+ * @type {import('@types/relationships').RelationshipsMap}
+ */
+export const relationships = {
+  category: {
+    type: relationshipTypes.morphMany,
+    service: categoriesPath
+  },
+  tags: {
+    type: relationshipTypes.manyToMany,
+    service: tagsPath,
+    pivotService: tagPostPath,
+    primaryKey: 'post_id',
+    relatedKey: 'tag_id'
+  },
+  comments: {
+    type: relationshipTypes.morphMany,
+    service: commentsPath,
+    morphKey: 'morph_id',
+    morphType: 'morph_type'
+  }
+}

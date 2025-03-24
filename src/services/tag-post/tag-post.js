@@ -2,26 +2,24 @@
 import { authenticate } from '@feathersjs/authentication'
 
 import { hooks as schemaHooks } from '@feathersjs/schema'
-import {
-  tagPostDataValidator,
-  tagPostPatchValidator,
-  tagPostQueryValidator,
-  tagPostResolver,
-  tagPostExternalResolver,
-  tagPostDataResolver,
-  tagPostPatchResolver,
-  tagPostQueryResolver
-} from './tag-post.schema.js'
 import { TagPostService, getOptions } from './tag-post.class.js'
-
-export const tagPostPath = 'tag-post'
-export const tagPostMethods = ['find', 'get', 'create', 'patch', 'remove']
+import {
+  tagPostDataResolver,
+  tagPostDataValidator,
+  tagPostExternalResolver,
+  tagPostPatchResolver,
+  tagPostPatchValidator,
+  tagPostQueryResolver,
+  tagPostQueryValidator,
+  tagPostResolver
+} from './tag-post.schema.js'
+import { tagPostMethods, tagPostPath } from './tag-post.shared.js'
 
 export * from './tag-post.class.js'
 export * from './tag-post.schema.js'
 
 // A configure function that registers the service and its hooks via `app.configure`
-export const tagPost = app => {
+export const tagPost = (app) => {
   // Register our service on the Feathers application
   app.use(tagPostPath, new TagPostService(getOptions(app)), {
     // A list of all methods this service exposes externally
@@ -39,11 +37,20 @@ export const tagPost = app => {
       ]
     },
     before: {
-      all: [schemaHooks.validateQuery(tagPostQueryValidator), schemaHooks.resolveQuery(tagPostQueryResolver)],
+      all: [
+        schemaHooks.validateQuery(tagPostQueryValidator),
+        schemaHooks.resolveQuery(tagPostQueryResolver)
+      ],
       find: [],
       get: [],
-      create: [schemaHooks.validateData(tagPostDataValidator), schemaHooks.resolveData(tagPostDataResolver)],
-      patch: [schemaHooks.validateData(tagPostPatchValidator), schemaHooks.resolveData(tagPostPatchResolver)],
+      create: [
+        schemaHooks.validateData(tagPostDataValidator),
+        schemaHooks.resolveData(tagPostDataResolver)
+      ],
+      patch: [
+        schemaHooks.validateData(tagPostPatchValidator),
+        schemaHooks.resolveData(tagPostPatchResolver)
+      ],
       remove: []
     },
     after: {

@@ -1,0 +1,125 @@
+name: Auto - PR Testing
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened, ready_for_review]
+
+jobs:
+  install:
+    name: Install Dependencies
+    runs-on: ubuntu-22.04
+    if: github.event.pull_request.draft == false
+    timeout-minutes: 15
+    strategy:
+      matrix:
+        node-version: [20]
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ matrix.node-version }}
+
+      - name: Install Yarn
+        run: corepack enable
+
+      - name: Cache dependencies
+        uses: actions/cache@v4
+        with:
+          path: |
+            node_modules
+            /home/runner/.cache/yarn
+          key: ${{ runner.os }}-yarn-${{ hashFiles('yarn.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-yarn-
+
+      - name: Install dependencies
+        run: yarn install
+        working-directory: api
+
+  tests:
+    name: Run Tests
+    runs-on: ubuntu-22.04
+    needs: [install]
+    timeout-minutes: 30
+    if: github.event.pull_request.draft == false
+    strategy:
+      matrix:
+        node-version: [20]
+    services:
+      postgres:
+        image: postgres:latest
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: testdb
+        ports: ['5432:5432']
+        options: >-
+          --health-cmd "pg_isready -U postgres"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+      redis:
+        image: redis:latest
+        ports: ['6379:6379']
+        options: >-
+          --health-cmd "redis-cli ping"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      
+      - uses: actions/setup-node@v3
+        with:
+          node-version: ${{ matrix.node-version }}
+
+      - uses: actions/cache@v4
+        with:
+          path: |
+            node_modules
+            /home/runner/.cache/yarn
+          key: ${{ runner.os }}-yarn-${{ hashFiles('yarn.lock') }}
+
+      - name: Install Yarn
+        run: corepack enable
+
+      - name: Install dependencies
+        run: yarn install
+        working-directory: api
+
+      - name: Run Tests with Coverage
+        env:
+          NODE_ENV: "test"
+          POSTGRES_CONNECTION_STRING: "postgres://postgres:postgres@localhost:5432/testdb"
+          REDIS_HOSTNAME: "localhost"
+          REDIS_PORT: "6379"
+          PORT: "9999"
+        run: |
+          yarn migrate:fresh
+          yarn pr-test
+
+  finish:
+    name: Pull Request Verify Check
+    needs: [tests]
+    runs-on: ubuntu-22.04
+    if: |
+      always() && 
+      github.event.pull_request.draft == false && 
+      startsWith(github.head_ref, 'automerge') != true
+    steps:
+      - name: All Results
+        run: echo 'Tests executed successfully'
+      - name: Check Results
+        if: ${{ failure() }}
+        run: exit 1
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true

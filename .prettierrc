@@ -1,14 +1,12 @@
 {
   "tabWidth": 2,
   "useTabs": false,
-  "printWidth": 110,
+  "printWidth": 80,
   "semi": false,
   "trailingComma": "none",
   "singleQuote": true,
-  "arrowParens": "avoid",
-  "bracketSpacing": true,
-  "endOfLine": "auto",
-  "jsxSingleQuote": false,
-  "quoteProps": "as-needed",
-  "parser": "babel"
+  "parser": "babel",
+  "plugins": [
+    "prettier-plugin-organize-imports"
+  ]
 }

@@ -1,22 +1,22 @@
 // For more information about this file see https://dove.feathersjs.com/guides/cli/application.html
-import { feathers } from '@feathersjs/feathers'
-import express, {
-  rest,
-  json,
-  urlencoded,
-  cors,
-  serveStatic,
-  notFound,
-  errorHandler
-} from '@feathersjs/express'
 import configuration from '@feathersjs/configuration'
+import express, {
+  cors,
+  errorHandler,
+  json,
+  notFound,
+  rest,
+  serveStatic,
+  urlencoded
+} from '@feathersjs/express'
+import { feathers } from '@feathersjs/feathers'
 import socketio from '@feathersjs/socketio'
+import { channels } from './channels.js'
 import { configurationValidator } from './configuration.js'
-import { logger } from './logger.js'
 import { logError } from './hooks/log-error.js'
+import { logger } from './logger.js'
 import { postgresql } from './postgresql.js'
 import { services } from './services/index.js'
-import { channels } from './channels.js'
 
 const app = express(feathers())
 

@@ -21,7 +21,7 @@ describe('extended knex adapter', () => {
 
     await createPostWithCategory()
     await createPostWithCategory()
-    const { category, post } = await createPostWithCategory(targetCateogryName)
+    const { category } = await createPostWithCategory(targetCateogryName)
 
     const posts = await app.service('posts').find({
       query: {
@@ -30,6 +30,7 @@ describe('extended knex adapter', () => {
       }
     })
 
-    console.log(posts)
+    expect(posts.data.length).toBe(1)
+    expect(posts.data[0].category_id).toBe(category.id)
   })
 })

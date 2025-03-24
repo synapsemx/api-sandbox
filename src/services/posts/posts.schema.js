@@ -65,8 +65,9 @@ export const postsQueryResolver = resolve({})
  */
 export const relationships = {
   category: {
-    type: relationshipTypes.morphMany,
-    service: categoriesPath
+    type: relationshipTypes.belongsTo,
+    service: categoriesPath,
+    foreignKey: 'category_id'
   },
   tags: {
     type: relationshipTypes.manyToMany,

@@ -4,10 +4,9 @@
  * @typedef {import('@types/relationships.js').RelationshipsMap} RelationshipsMap
  * @typedef {import('@types/relationships.js').RelationshipDefinition} RelationshipDefinition
  */
-import { GeneralError } from '@feathersjs/errors'
 import { KnexAdapter as BaseKnexAdapter } from '@feathersjs/knex'
 import { pick } from '../../utils/object.js'
-import { buildRelationColumns } from './join-helpers.js'
+import JoinRelationSupport from './join-relation.support.js'
 import WhereRelationSupport from './where-relation.support.js'
 
 class KnexAdapter extends BaseKnexAdapter {
@@ -65,12 +64,10 @@ class KnexAdapter extends BaseKnexAdapter {
     const builder = this.db(params)
 
     this.selectColumns(builder, filters, tableName, primaryKey)
-    // this.addRelationJoins(builder, joinRelation)
+    this.addRelationJoins(builder, joinRelation)
     this.applyWhereConditionsForRelations(builder, whereRelation, params)
     this.applyQueryFilters(builder, query, filters)
     this.applySortOrders(builder, filters)
-
-    console.log(builder.toQuery())
 
     return builder
   }
@@ -157,34 +154,14 @@ class KnexAdapter extends BaseKnexAdapter {
    * @param {string[]} relationKeys
    */
   addRelationJoins(builder, relationKeys = []) {
-    const relationships = this.relationships
+    const joinRelationSupport = new JoinRelationSupport(
+      this.knex,
+      this.relationships,
+      this.app,
+      this.options.name
+    )
 
-    for (const relationKey of relationKeys) {
-      const definition = relationships[relationKey]
-
-      if (!definition) {
-        throw new GeneralError(`Invalid relationship: ${relationKey}`)
-      }
-
-      const {
-        mainTablePrimaryKey,
-        relatedTablePrimaryKey,
-        pivotTablePrimaryKey,
-        pivotTableRelatedKey,
-        relatedTableName
-      } = buildRelationColumns(this.app, definition, this.options.name)
-
-      builder.leftJoin(
-        definition.pivot,
-        pivotTablePrimaryKey,
-        mainTablePrimaryKey
-      )
-      builder.leftJoin(
-        relatedTableName,
-        pivotTableRelatedKey,
-        relatedTablePrimaryKey
-      )
-    }
+    joinRelationSupport.applyJoins(builder, relationKeys)
   }
 
   /**

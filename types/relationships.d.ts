@@ -1,9 +1,15 @@
-import { relationshipTypes } from '../src/utils/relationships.js'
+export const relationshipTypes = {
+  belongsTo: 'belongsTo',
+  hasMany: 'hasMany',
+  manyToMany: 'manyToMany',
+  morphMany: 'morphMany',
+  morphTo: 'morphTo'
+} as const
 
-type RelationshipType = (typeof RELATIONSHIP_TYPES)[keyof typeof RELATIONSHIP_TYPES]
+type RelationshipType = (typeof relationshipTypes)[keyof typeof relationshipTypes]
 
 type BaseRelationship = {
-  type: string
+  type: RelationshipType
   service: string,
   required?: boolean
 }

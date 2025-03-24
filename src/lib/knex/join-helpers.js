@@ -35,7 +35,5 @@ export const buildRelationColumns = (app, definition, mainTableName) => {
     columns.relatedTableForeignKey = null
   }
 
-  console.log(columns)
-
   return columns
 }

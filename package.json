@@ -34,11 +34,12 @@
     "start": "node src",
     "dev": "nodemon src/",
     "prettier": "npx prettier \"**/*.js\" --write",
-    "mocha": "cross-env NODE_ENV=test mocha test/ --recursive --exit",
-    "test": "cross-env NODE_ENV=test npm run migrate && npm run mocha",
-    "bundle:client": "npm pack --pack-destination ./public",
+    "test": "dotenv -e .env.test pnpm migrate:fresh && pnpm vitest",
+    "vitest": "vitest",
+    "bundle:client": "pnpm pack --pack-destination ./public",
     "migrate": "knex migrate:latest",
-    "migrate:make": "knex migrate:make -x mjs"
+    "migrate:make": "knex migrate:make -x mjs",
+    "migrate:fresh": "node ./scripts/migrate-fresh.js"
   },
   "dependencies": {
     "@feathersjs/adapter-commons": "^5.0.33",
@@ -62,10 +63,11 @@
     "@feathersjs/cli": "5.0.33",
     "@feathersjs/rest-client": "^5.0.33",
     "axios": "^1.7.9",
-    "cross-env": "^7.0.3",
-    "mocha": "^11.1.0",
+    "dotenv": "^16.4.7",
+    "dotenv-cli": "^8.0.0",
     "nodemon": "^3.1.9",
     "prettier": "^3.5.3",
-    "prettier-plugin-organize-imports": "^4.1.0"
+    "prettier-plugin-organize-imports": "^4.1.0",
+    "vitest": "^3.0.9"
   }
 }

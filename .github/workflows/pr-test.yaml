@@ -103,8 +103,7 @@ jobs:
           REDIS_PORT: "6379"
           PORT: "9999"
         run: |
-          pnpm migrate:fresh
-          pnpm ci
+          pnpm test:ci
 
   finish:
     name: Pull Request Verify Check

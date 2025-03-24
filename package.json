@@ -35,8 +35,8 @@
     "dev": "nodemon src/",
     "prettier": "npx prettier \"**/*.js\" --write",
     "test": "dotenv -e .env.test pnpm migrate:fresh && pnpm vitest",
+    "test:ci": "pnpm migrate:fresh && pnpm vitest --coverage --silent",
     "vitest": "vitest",
-    "ci": "vitest --silent --coverage",
     "bundle:client": "pnpm pack --pack-destination ./public",
     "migrate": "knex migrate:latest",
     "migrate:make": "knex migrate:make -x mjs",
@@ -63,6 +63,7 @@
   "devDependencies": {
     "@feathersjs/cli": "5.0.33",
     "@feathersjs/rest-client": "^5.0.33",
+    "@vitest/coverage-v8": "^3.0.9",
     "axios": "^1.7.9",
     "dotenv": "^16.4.7",
     "dotenv-cli": "^8.0.0",

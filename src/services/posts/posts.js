@@ -10,7 +10,8 @@ import {
   postsPatchValidator,
   postsQueryResolver,
   postsQueryValidator,
-  postsResolver
+  postsResolver,
+  relationships
 } from './posts.schema.js'
 import { postsMethods, postsPath } from './posts.shared.js'
 
@@ -20,7 +21,7 @@ export * from './posts.schema.js'
 // A configure function that registers the service and its hooks via `app.configure`
 export const posts = (app) => {
   // Register our service on the Feathers application
-  app.use(postsPath, new PostsService(getOptions(app)), {
+  app.use(postsPath, new PostsService(getOptions(app, relationships)), {
     // A list of all methods this service exposes externally
     methods: postsMethods,
     // You can add additional custom events to be sent to clients here

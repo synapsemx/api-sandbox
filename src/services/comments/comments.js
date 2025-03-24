@@ -10,7 +10,8 @@ import {
   commentsPatchValidator,
   commentsQueryResolver,
   commentsQueryValidator,
-  commentsResolver
+  commentsResolver,
+  relationships
 } from './comments.schema.js'
 import { commentsMethods, commentsPath } from './comments.shared.js'
 
@@ -20,7 +21,7 @@ export * from './comments.schema.js'
 // A configure function that registers the service and its hooks via `app.configure`
 export const comments = (app) => {
   // Register our service on the Feathers application
-  app.use(commentsPath, new CommentsService(getOptions(app)), {
+  app.use(commentsPath, new CommentsService(getOptions(app, relationships)), {
     // A list of all methods this service exposes externally
     methods: commentsMethods,
     // You can add additional custom events to be sent to clients here

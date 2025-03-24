@@ -10,7 +10,8 @@ import {
   categoriesPatchValidator,
   categoriesQueryResolver,
   categoriesQueryValidator,
-  categoriesResolver
+  categoriesResolver,
+  relationships
 } from './categories.schema.js'
 import { categoriesMethods, categoriesPath } from './categories.shared.js'
 
@@ -20,12 +21,16 @@ export * from './categories.schema.js'
 // A configure function that registers the service and its hooks via `app.configure`
 export const categories = (app) => {
   // Register our service on the Feathers application
-  app.use(categoriesPath, new CategoriesService(getOptions(app)), {
-    // A list of all methods this service exposes externally
-    methods: categoriesMethods,
-    // You can add additional custom events to be sent to clients here
-    events: []
-  })
+  app.use(
+    categoriesPath,
+    new CategoriesService(getOptions(app, relationships)),
+    {
+      // A list of all methods this service exposes externally
+      methods: categoriesMethods,
+      // You can add additional custom events to be sent to clients here
+      events: []
+    }
+  )
   // Initialize hooks
   app.service(categoriesPath).hooks({
     around: {

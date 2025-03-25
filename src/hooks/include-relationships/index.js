@@ -36,6 +36,13 @@ const includeRelationships = async (context) => {
 
   const isPaginatedResult = isPaginated(result)
   const isSingleResult = isSingle(result)
+
+  // Skip processing if the result is a plain array, since we can't
+  // reliably attach relationships without a known wrapping structure.
+  if (!isPaginatedResult && !isSingleResult) {
+    return context
+  }
+
   const { resources, wrap } = extractResources(
     result,
     isPaginatedResult,

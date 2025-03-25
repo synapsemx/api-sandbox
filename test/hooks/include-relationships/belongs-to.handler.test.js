@@ -1,5 +1,7 @@
 import { describe, expect, it } from 'vitest'
+import { app } from '../../../src/app.js'
 import { createPostWithCategory } from '../../../src/services/posts/posts.factory.js'
+import { postsPath } from '../../../src/services/posts/posts.shared.js'
 import { resetDatabaseUsingTransaction } from '../../helpers/db.js'
 import { times } from '../../helpers/expects.js'
 import { instantiateHttp, setupServer } from '../../helpers/http.js'
@@ -8,7 +10,7 @@ describe('Include Relationships hook - Belongs to handler', () => {
   setupServer()
   resetDatabaseUsingTransaction()
 
-  it('should work in paginated resource', async () => {
+  it('should work in paginated resources', async () => {
     const http = instantiateHttp()
 
     const posts = await times(createPostWithCategory, 3)
@@ -32,6 +34,17 @@ describe('Include Relationships hook - Belongs to handler', () => {
       expect(apiPost).toBeDefined()
       expect(apiPost.category).toBe(expectedCategoryId)
     }
+  })
+
+  it('should not include relations in non-paginated resources', async () => {
+    await times(createPostWithCategory, 3)
+
+    const data = await app.service(postsPath).find({
+      paginate: false
+    })
+
+    expect(data).toHaveLength(3)
+    expect(data[0].relations).toBeUndefined()
   })
 
   it('should work in single resource', async () => {

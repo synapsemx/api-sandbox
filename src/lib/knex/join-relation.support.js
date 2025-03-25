@@ -83,6 +83,8 @@ class JoinRelationSupport {
     const { mainTablePrimaryKey, relatedTableForeignKey, relatedTableName } =
       buildRelationColumns(this.app, relationDefinition, this.selfTableName)
 
+    console.log(mainTablePrimaryKey, relatedTableForeignKey, relatedTableName)
+
     builder.leftJoin(
       relatedTableName,
       relatedTableForeignKey,
@@ -97,18 +99,16 @@ class JoinRelationSupport {
   joinManyToMany(builder, relationDefinition) {
     const {
       relatedTableName,
+      pivotTableName,
       pivotTablePrimaryKey,
       pivotTableRelatedKey,
       mainTablePrimaryKey,
       relatedTablePrimaryKey
     } = buildRelationColumns(this.app, relationDefinition, this.selfTableName)
 
-    builder.leftJoin(
-      relationDefinition.pivot,
-      pivotTablePrimaryKey,
-      mainTablePrimaryKey
-    )
+    console.log(mainTablePrimaryKey)
 
+    builder.leftJoin(pivotTableName, pivotTablePrimaryKey, mainTablePrimaryKey)
     builder.leftJoin(
       relatedTableName,
       pivotTableRelatedKey,

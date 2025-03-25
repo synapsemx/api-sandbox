@@ -49,7 +49,7 @@ export const categoriesQuerySchema = Type.Intersect(
     // Add additional query properties here
     Type.Object({}, { additionalProperties: false })
   ],
-  { additionalProperties: false }
+  { additionalProperties: true }
 )
 export const categoriesQueryValidator = getValidator(
   categoriesQuerySchema,
@@ -63,6 +63,7 @@ export const categoriesQueryResolver = resolve({})
 export const relationships = {
   posts: {
     type: relationshipTypes.hasMany,
-    service: postsPath
+    service: postsPath,
+    foreignKey: 'category_id'
   }
 }

@@ -57,7 +57,7 @@ export const commentsQuerySchema = Type.Intersect(
     // Add additional query properties here
     Type.Object({}, { additionalProperties: false })
   ],
-  { additionalProperties: false }
+  { additionalProperties: true }
 )
 export const commentsQueryValidator = getValidator(
   commentsQuerySchema,

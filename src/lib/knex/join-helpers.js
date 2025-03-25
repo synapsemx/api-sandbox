@@ -8,32 +8,37 @@ import { getServiceTableName } from '../../utils/relationships.js'
 export const buildRelationColumns = (app, definition, mainTableName) => {
   const relatedTableName = getServiceTableName(app, definition.service)
 
-  const { pivot, primaryKey, relatedKey, foreignKey } = definition
+  const { pivotService, primaryKey, relatedKey, foreignKey } = definition
 
-  /**
-   * @type {Record<string, string|null>}
-   */
-  const columns = {
-    mainTablePrimaryKey: `${mainTableName}.id`,
-    relatedTablePrimaryKey: `${relatedTableName}.id`,
-    relatedTableName
+  const mainTablePrimaryKey = `${mainTableName}.id`
+  const relatedTablePrimaryKey = `${relatedTableName}.id`
+
+  const mainTableForeignKey = foreignKey
+    ? `${mainTableName}.${foreignKey}`
+    : null
+  const relatedTableForeignKey = foreignKey
+    ? `${relatedTableName}.${foreignKey}`
+    : null
+
+  const pivotTableName = pivotService
+    ? getServiceTableName(app, pivotService)
+    : null
+
+  const pivotTablePrimaryKey = pivotService
+    ? `${pivotTableName}.${primaryKey}`
+    : null
+  const pivotTableRelatedKey = pivotService
+    ? `${pivotTableName}.${relatedKey}`
+    : null
+
+  return {
+    relatedTableName,
+    mainTablePrimaryKey,
+    relatedTablePrimaryKey,
+    mainTableForeignKey,
+    relatedTableForeignKey,
+    pivotTableName,
+    pivotTablePrimaryKey,
+    pivotTableRelatedKey
   }
-
-  if (pivot) {
-    columns.pivotTablePrimaryKey = `${pivot}.${primaryKey}`
-    columns.pivotTableRelatedKey = `${pivot}.${relatedKey}`
-  } else {
-    columns.pivotTablePrimaryKey = null
-    columns.pivotTableRelatedKey = null
-  }
-
-  if (foreignKey) {
-    columns.mainTableForeignKey = `${mainTableName}.${foreignKey}`
-    columns.relatedTableForeignKey = `${relatedTableName}.${foreignKey}`
-  } else {
-    columns.mainTableForeignKey = null
-    columns.relatedTableForeignKey = null
-  }
-
-  return columns
 }

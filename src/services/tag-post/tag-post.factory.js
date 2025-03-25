@@ -1,6 +1,6 @@
 import { faker } from '@faker-js/faker'
 import { insert } from '../../utils/factory.js'
-import { tagPostsTable } from './tag-posts.shared.js'
+import { tagPostTable } from './tag-post.shared.js'
 
 export function generateTagPost(attributes = {}) {
   return {
@@ -12,5 +12,5 @@ export function generateTagPost(attributes = {}) {
 }
 
 export function createTagPost(attributes = {}) {
-  return insert(generateTagPost(attributes), tagPostsTable)
+  return insert(generateTagPost(attributes), tagPostTable)
 }

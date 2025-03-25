@@ -40,7 +40,7 @@ export const tagsQuerySchema = Type.Intersect(
     // Add additional query properties here
     Type.Object({}, { additionalProperties: false })
   ],
-  { additionalProperties: false }
+  { additionalProperties: true }
 )
 export const tagsQueryValidator = getValidator(tagsQuerySchema, queryValidator)
 export const tagsQueryResolver = resolve({})

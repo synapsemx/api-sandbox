@@ -9,5 +9,4 @@
     },
     "include": ["src/**/*.js", "test/**/*.js", "types/**/*.d.ts"],
     "exclude": ["node_modules"],
-
   }

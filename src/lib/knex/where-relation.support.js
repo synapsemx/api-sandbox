@@ -43,7 +43,10 @@ class WhereRelationSupport {
    */
   applyRelationCondition(builder, relationName, relationQuery) {
     const relationDefinition = this.relationships[relationName]
-    const relatedTableName = getServiceTableName(relationDefinition.service)
+    const relatedTableName = getServiceTableName(
+      this.app,
+      relationDefinition.service
+    )
 
     const subquery = this.knex.from(relatedTableName).select('*')
 
@@ -101,6 +104,7 @@ class WhereRelationSupport {
    */
   addManyToManyCondition(subquery, relationDefinition) {
     const {
+      pivotTableName,
       relatedTablePrimaryKey,
       mainTablePrimaryKey,
       pivotTablePrimaryKey,
@@ -108,11 +112,7 @@ class WhereRelationSupport {
     } = buildRelationColumns(this.app, relationDefinition, this.selfTableName)
 
     subquery
-      .leftJoin(
-        relationDefinition.pivot,
-        pivotTableRelatedKey,
-        relatedTablePrimaryKey
-      )
+      .leftJoin(pivotTableName, pivotTableRelatedKey, relatedTablePrimaryKey)
       .whereRaw(`${pivotTablePrimaryKey} = ${mainTablePrimaryKey}`)
   }
 }

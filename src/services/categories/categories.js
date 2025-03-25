@@ -1,6 +1,7 @@
 // For more information about this file see https://dove.feathersjs.com/guides/cli/service.html
 
 import { hooks as schemaHooks } from '@feathersjs/schema'
+import includeRelationships from '../../hooks/include-relationships/index.js'
 import { CategoriesService, getOptions } from './categories.class.js'
 import {
   categoriesDataResolver,
@@ -61,7 +62,7 @@ export const categories = (app) => {
       remove: []
     },
     after: {
-      all: []
+      all: [includeRelationships]
     },
     error: {
       all: []

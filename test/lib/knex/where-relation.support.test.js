@@ -4,7 +4,7 @@ import { createCategory } from '../../../src/services/categories/categories.fact
 import {
   createPostWithCategory,
   createPostWithTags
-} from '../../../src/services/posts/posts.factory.js'
+} from '../../../src/services/composite-factories.js'
 import { resetDatabaseUsingTransaction } from '../../helpers/db.js'
 
 describe('Knex Adapter Extended - Where Relationship Support', () => {

@@ -1,10 +1,9 @@
 /**
  * @typedef {import("@feathersjs/feathers").HookContext} HookContext
- * @typedef
  * @typedef {import("@types/include-relationships.js").RelationshipHandler} RelationshipHandler
  */
 import belongsToHandler from './belongs-to.handler.js'
-// import hasManyHandler from './has-many.handler.js'
+import hasManyHandler from './has-many.handler.js'
 // import hasOneHandler from './has-one.handler.js'
 import { filterRelationsByUnique, relationshipKeyName } from './helpers.js'
 // import manyToManyHandler from './many-to-many.handler.js'
@@ -12,9 +11,9 @@ import { filterRelationsByUnique, relationshipKeyName } from './helpers.js'
 // import morphToHandler from './morph-to.handler.js'
 
 const relationshipHandlersMap = {
-  belongsTo: belongsToHandler
+  belongsTo: belongsToHandler,
   // hasOne: hasOneHandler,
-  // hasMany: hasManyHandler,
+  hasMany: hasManyHandler
   // manyToMany: manyToManyHandler,
   // morphTo: morphToHandler,
   // morphMany: morphManyHandler

@@ -53,7 +53,7 @@ export const tagPostQuerySchema = Type.Intersect(
     // Add additional query properties here
     Type.Object({}, { additionalProperties: false })
   ],
-  { additionalProperties: false }
+  { additionalProperties: true }
 )
 export const tagPostQueryValidator = getValidator(
   tagPostQuerySchema,

@@ -1,5 +1,4 @@
 // For more information about this file see https://dove.feathersjs.com/guides/cli/service.html
-import { authenticate } from '@feathersjs/authentication'
 
 import { hooks as schemaHooks } from '@feathersjs/schema'
 import { TagPostService, getOptions } from './tag-post.class.js'
@@ -31,7 +30,6 @@ export const tagPost = (app) => {
   app.service(tagPostPath).hooks({
     around: {
       all: [
-        authenticate('jwt'),
         schemaHooks.resolveExternal(tagPostExternalResolver),
         schemaHooks.resolveResult(tagPostResolver)
       ]

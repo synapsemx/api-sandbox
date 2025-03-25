@@ -10,8 +10,9 @@ type RelationshipType = (typeof relationshipTypes)[keyof typeof relationshipType
 
 type BaseRelationship = {
   type: RelationshipType
-  service: string,
+  service: string
   required?: boolean
+  key?: string
 }
 
 type BelongsToRelationship = BaseRelationship & {

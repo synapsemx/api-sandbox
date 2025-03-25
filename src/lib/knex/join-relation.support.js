@@ -29,6 +29,7 @@ class JoinRelationSupport {
   applyJoins(builder, relationKeys = []) {
     for (const relationKey of relationKeys) {
       const relationDefinition = this.relationships[relationKey]
+      relationDefinition.key = relationKey
 
       if (!relationDefinition) {
         continue
@@ -61,17 +62,15 @@ class JoinRelationSupport {
   }
 
   /**
-   * @param {QueryBuilder} builder
    * @param {RelationshipDefinition} relationDefinition
    */
-  joinBelongsTo(builder, relationDefinition) {
-    const { mainTableForeignKey, relatedTablePrimaryKey, relatedTableName } =
-      buildRelationColumns(this.app, relationDefinition, this.selfTableName)
+  getRelationColumns(relationDefinition) {
+    return buildRelationColumns(
+      this.app,
+      relationDefinition,
+      this.selfTableName,
 
-    builder.leftJoin(
-      relatedTableName,
-      mainTableForeignKey,
-      relatedTablePrimaryKey
+      { avoidTableConflicts: true }
     )
   }
 
@@ -79,17 +78,22 @@ class JoinRelationSupport {
    * @param {QueryBuilder} builder
    * @param {RelationshipDefinition} relationDefinition
    */
+  joinBelongsTo(builder, relationDefinition) {
+    const { mainTableForeignKey, relatedTablePrimaryKey, safeJoinKey } =
+      this.getRelationColumns(relationDefinition)
+
+    builder.leftJoin(safeJoinKey, mainTableForeignKey, relatedTablePrimaryKey)
+  }
+
+  /**
+   * @param {QueryBuilder} builder
+   * @param {RelationshipDefinition} relationDefinition
+   */
   joinHasMany(builder, relationDefinition) {
-    const { mainTablePrimaryKey, relatedTableForeignKey, relatedTableName } =
-      buildRelationColumns(this.app, relationDefinition, this.selfTableName)
+    const { mainTablePrimaryKey, relatedTableForeignKey, safeJoinKey } =
+      this.getRelationColumns(relationDefinition)
 
-    console.log(mainTablePrimaryKey, relatedTableForeignKey, relatedTableName)
-
-    builder.leftJoin(
-      relatedTableName,
-      relatedTableForeignKey,
-      mainTablePrimaryKey
-    )
+    builder.leftJoin(safeJoinKey, relatedTableForeignKey, mainTablePrimaryKey)
   }
 
   /**
@@ -98,22 +102,16 @@ class JoinRelationSupport {
    */
   joinManyToMany(builder, relationDefinition) {
     const {
-      relatedTableName,
       pivotTableName,
       pivotTablePrimaryKey,
       pivotTableRelatedKey,
       mainTablePrimaryKey,
-      relatedTablePrimaryKey
-    } = buildRelationColumns(this.app, relationDefinition, this.selfTableName)
-
-    console.log(mainTablePrimaryKey)
+      relatedTablePrimaryKey,
+      safeJoinKey
+    } = this.getRelationColumns(relationDefinition)
 
     builder.leftJoin(pivotTableName, pivotTablePrimaryKey, mainTablePrimaryKey)
-    builder.leftJoin(
-      relatedTableName,
-      pivotTableRelatedKey,
-      relatedTablePrimaryKey
-    )
+    builder.leftJoin(safeJoinKey, pivotTableRelatedKey, relatedTablePrimaryKey)
   }
 }
 

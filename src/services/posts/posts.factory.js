@@ -6,6 +6,7 @@ export function generatePost(attributes = {}) {
   return {
     id: faker.string.uuid(),
     category_id: faker.string.uuid(),
+    parent_id: null,
     content: faker.lorem.paragraph(),
     ...attributes
   }

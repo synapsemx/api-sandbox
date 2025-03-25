@@ -1,5 +1,6 @@
 import { createCategory } from './categories/categories.factory.js'
 import { createPost } from './posts/posts.factory.js'
+import { createRelatedPost } from './related-post/related-post.factory.js'
 import { createTagPost } from './tag-post/tag-post.factory.js'
 import { createTag } from './tags/tags.factory.js'
 
@@ -11,6 +12,26 @@ export async function createPostWithCategory({
   const post = await createPost({ category_id: category.id, ...attributes })
 
   return { category, post }
+}
+
+export async function createPostWithParent({
+  attributes = {},
+  parentAttributes = {},
+  categoryAttributes = {}
+} = {}) {
+  const category = await createCategory(categoryAttributes)
+  const parent = await createPost({
+    category_id: category.id,
+    ...parentAttributes
+  })
+
+  const post = await createPost({
+    category_id: category.id,
+    parent_id: parent.id,
+    ...attributes
+  })
+
+  return { parent, post, category }
 }
 
 export async function createPostWithTags({
@@ -33,6 +54,34 @@ export async function createPostWithTags({
   }
 
   return { post, category, tags }
+}
+
+export async function createPostWithRelatedPosts({
+  attributes = {},
+  categoryAttributes = {},
+  relatedPostsAttributes = []
+} = {}) {
+  const { post, category } = await createPostWithCategory({
+    attributes,
+    categoryAttributes
+  })
+  const relatedPosts = []
+
+  for (const attributes of relatedPostsAttributes) {
+    const relatedPost = await createPost({
+      category_id: category.id,
+      ...attributes
+    })
+
+    await createRelatedPost({
+      post_id: post.id,
+      related_post_id: relatedPost.id
+    })
+
+    relatedPosts.push(relatedPost)
+  }
+
+  return { post, category, relatedPosts }
 }
 
 export async function createCategoryWithPosts({

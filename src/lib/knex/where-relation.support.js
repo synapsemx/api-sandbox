@@ -5,7 +5,6 @@
  * @typedef {import('@types/relationships.js').RelationshipDefinition} RelationshipDefinition
  */
 
-import { getServiceTableName } from '../../utils/relationships.js'
 import { buildRelationColumns } from './join-helpers.js'
 
 class WhereRelationSupport {
@@ -43,12 +42,10 @@ class WhereRelationSupport {
    */
   applyRelationCondition(builder, relationName, relationQuery) {
     const relationDefinition = this.relationships[relationName]
-    const relatedTableName = getServiceTableName(
-      this.app,
-      relationDefinition.service
-    )
+    relationDefinition.key = relationName
+    const { safeJoinKey } = this.getRelationColumns(relationDefinition)
 
-    const subquery = this.knex.from(relatedTableName).select('*')
+    const subquery = this.knex.from(safeJoinKey).select('*')
 
     this.addRelationJoinCondition(subquery, relationDefinition)
     this.knexify(subquery, relationQuery)
@@ -82,7 +79,7 @@ class WhereRelationSupport {
    */
   addBelongsToCondition(subquery, relationDefinition) {
     const { mainTableForeignKey, relatedTablePrimaryKey } =
-      buildRelationColumns(this.app, relationDefinition, this.selfTableName)
+      this.getRelationColumns(relationDefinition)
 
     subquery.whereRaw(`${mainTableForeignKey} = ${relatedTablePrimaryKey}`)
   }
@@ -93,7 +90,7 @@ class WhereRelationSupport {
    */
   addHasManyCondition(subquery, relationDefinition) {
     const { mainTablePrimaryKey, relatedTableForeignKey } =
-      buildRelationColumns(this.app, relationDefinition, this.selfTableName)
+      this.getRelationColumns(relationDefinition)
 
     subquery.whereRaw(`${mainTablePrimaryKey} = ${relatedTableForeignKey}`)
   }
@@ -109,11 +106,23 @@ class WhereRelationSupport {
       mainTablePrimaryKey,
       pivotTablePrimaryKey,
       pivotTableRelatedKey
-    } = buildRelationColumns(this.app, relationDefinition, this.selfTableName)
+    } = this.getRelationColumns(relationDefinition)
 
     subquery
       .leftJoin(pivotTableName, pivotTableRelatedKey, relatedTablePrimaryKey)
       .whereRaw(`${pivotTablePrimaryKey} = ${mainTablePrimaryKey}`)
+  }
+
+  /**
+   * @param {RelationshipDefinition} relationDefinition
+   */
+  getRelationColumns(relationDefinition) {
+    return buildRelationColumns(
+      this.app,
+      relationDefinition,
+      this.selfTableName,
+      { avoidTableConflicts: true }
+    )
   }
 }
 

@@ -7,16 +7,16 @@ import hasManyHandler from './has-many.handler.js'
 // import hasOneHandler from './has-one.handler.js'
 import { filterRelationsByUnique, relationshipKeyName } from './helpers.js'
 import manyToManyHandler from './many-to-many.handler.js'
-// import morphManyHandler from './morph-many.handler.js'
+import morphManyHandler from './morph-many.handler.js'
 // import morphToHandler from './morph-to.handler.js'
 
 const relationshipHandlersMap = {
   belongsTo: belongsToHandler,
   // hasOne: hasOneHandler,
   hasMany: hasManyHandler,
-  manyToMany: manyToManyHandler
+  manyToMany: manyToManyHandler,
   // morphTo: morphToHandler,
-  // morphMany: morphManyHandler
+  morphMany: morphManyHandler
 }
 
 /**

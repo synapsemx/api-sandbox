@@ -7,7 +7,7 @@ export function generateComment(attributes = {}) {
     id: faker.string.uuid(),
     morph_type: faker.helpers.arrayElement(['posts', 'pages']),
     morph_id: faker.string.uuid(),
-    text: faker.lorem.sentence(),
+    content: faker.lorem.sentence(),
     ...attributes
   }
 }

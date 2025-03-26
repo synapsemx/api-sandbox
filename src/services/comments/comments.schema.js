@@ -23,7 +23,7 @@ export const commentsExternalResolver = resolve({})
 // Schema for creating new entries
 export const commentsDataSchema = Type.Pick(
   commentsSchema,
-  ['morph_type', 'morph_id', 'text'],
+  ['morph_type', 'morph_id', 'content'],
   {
     $id: 'CommentsData'
   }
@@ -49,7 +49,7 @@ export const commentsQueryProperties = Type.Pick(commentsSchema, [
   'id',
   'morph_type',
   'morph_id',
-  'text'
+  'content'
 ])
 export const commentsQuerySchema = Type.Intersect(
   [

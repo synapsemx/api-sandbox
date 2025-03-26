@@ -16,3 +16,13 @@ export const getServiceTableName = (app, serviceName) => {
 
   return service.options.name
 }
+
+/**
+ * Extracts IDs from resources, using the given key (default: "id"), ignoring null values.
+ *
+ * @param {Record<string, unknown>[]} resources
+ * @param {string} [key='id']
+ * @returns {string[]}
+ */
+export const extractIds = (resources, key = 'id') =>
+  resources.map((resource) => resource[key]).filter(Boolean)

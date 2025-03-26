@@ -3,6 +3,7 @@
  * @typedef {import("@types/include-relationships.js").RelationshipHandler} RelationshipHandler
  */
 
+import { extractIds } from '../../utils/relationships.js'
 import {
   buildServiceParams,
   mapOneToMany,
@@ -26,7 +27,7 @@ const manyToManyHandler = async (
   const relatedService = app.service(relationshipDefinition.service)
   const pivotService = app.service(relationshipDefinition.pivotService)
 
-  const mainIds = extractMainIds(mainResources)
+  const mainIds = extractIds(mainResources)
 
   if (mainIds.length === 0) {
     return {
@@ -76,14 +77,5 @@ const manyToManyHandler = async (
     updatedRelations
   }
 }
-
-/**
- * Extracts IDs from main resources.
- *
- * @param {object[]} resources
- * @returns {unknown[]}
- */
-const extractMainIds = (resources) =>
-  resources.map((r) => r.id).filter((id) => id !== null)
 
 export default manyToManyHandler

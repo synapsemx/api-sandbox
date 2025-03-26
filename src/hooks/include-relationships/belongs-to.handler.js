@@ -3,6 +3,7 @@
  * @typedef {import("@types/include-relationships.js").RelationshipHandler} RelationshipHandler
  */
 
+import { extractIds } from '../../utils/relationships.js'
 import {
   buildServiceParams,
   mapOneToOne,
@@ -25,7 +26,7 @@ const belongsToHandler = async (
   const { app, params } = context
   const { service: serviceName, foreignKey } = relationshipDefinition
 
-  const relatedIds = extractForeignKeys(mainResources, foreignKey)
+  const relatedIds = extractIds(mainResources, foreignKey)
 
   if (relatedIds.length === 0) {
     return {
@@ -35,7 +36,9 @@ const belongsToHandler = async (
   }
 
   const relatedService = app.service(serviceName)
-  const query = buildQueryFromIds(relatedIds)
+  const query = {
+    id: { $in: relatedIds }
+  }
   const relatedResources = await relatedService.find(
     buildServiceParams(params, query)
   )
@@ -56,25 +59,5 @@ const belongsToHandler = async (
 
   return { updatedResources, updatedRelations }
 }
-
-/**
- * Extracts non-null foreign key values from resources.
- *
- * @param {object[]} resources
- * @param {string} key
- * @returns {unknown[]}
- */
-const extractForeignKeys = (resources, key) =>
-  resources.map((resource) => resource[key]).filter(Boolean)
-
-/**
- * Builds a `$in` query for the given IDs.
- *
- * @param {unknown[]} ids
- * @returns {object}
- */
-const buildQueryFromIds = (ids) => ({
-  id: { $in: ids }
-})
 
 export default belongsToHandler

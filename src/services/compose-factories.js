@@ -95,6 +95,7 @@ export async function createCategoryWithPosts({
 
   for (const attributes of postsAttributes) {
     const post = await createPost({ category_id: category.id, ...attributes })
+
     posts.push(post)
   }
 
@@ -123,4 +124,23 @@ export const createPostWithComments = async ({
   }
 
   return { post, category, comments }
+}
+
+export const createCommentWithPost = async ({
+  commentAttributes = {},
+  categoryAttributes = {},
+  postAttributes = {}
+} = {}) => {
+  const { post, category } = await createPostWithCategory({
+    attributes: postAttributes,
+    categoryAttributes
+  })
+
+  const comment = await createComment({
+    morph_type: postsPath,
+    morph_id: post.id,
+    ...commentAttributes
+  })
+
+  return { post, category, comment }
 }

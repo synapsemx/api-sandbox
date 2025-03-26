@@ -2,7 +2,7 @@ import { describe, it } from 'vitest'
 import {
   createPostWithRelatedPosts,
   createPostWithTags
-} from '../../../src/services/composite-factories.js'
+} from '../../../src/services/compose-factories.js'
 import { resetDatabaseUsingTransaction } from '../../helpers/db.js'
 import { instantiateHttp, setupServer } from '../../helpers/http.js'
 

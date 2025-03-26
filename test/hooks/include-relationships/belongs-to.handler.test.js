@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest'
 import { app } from '../../../src/app.js'
-import { createPostWithCategory } from '../../../src/services/composite-factories.js'
+import { createPostWithCategory } from '../../../src/services/compose-factories.js'
 import { postsPath } from '../../../src/services/posts/posts.shared.js'
 import { resetDatabaseUsingTransaction } from '../../helpers/db.js'
 import { times } from '../../helpers/expects.js'

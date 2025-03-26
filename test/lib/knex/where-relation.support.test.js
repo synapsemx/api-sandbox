@@ -6,7 +6,7 @@ import {
   createPostWithParent,
   createPostWithRelatedPosts,
   createPostWithTags
-} from '../../../src/services/composite-factories.js'
+} from '../../../src/services/compose-factories.js'
 import { resetDatabaseUsingTransaction } from '../../helpers/db.js'
 import { times } from '../../helpers/expects.js'
 

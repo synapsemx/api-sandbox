@@ -1,4 +1,6 @@
 // For more information about this file see https://dove.feathersjs.com/guides/cli/application.html
+import 'dotenv/config' // must be before importing configuration
+
 import configuration from '@feathersjs/configuration'
 import express, {
   cors,
@@ -11,6 +13,7 @@ import express, {
 } from '@feathersjs/express'
 import { feathers } from '@feathersjs/feathers'
 import socketio from '@feathersjs/socketio'
+import { authentication } from './authentication.js'
 import { channels } from './channels.js'
 import { configurationValidator } from './configuration.js'
 import { logError } from './hooks/log-error.js'
@@ -40,7 +43,7 @@ app.configure(
   })
 )
 app.configure(postgresql)
-
+app.configure(authentication)
 app.configure(services)
 app.configure(channels)
 

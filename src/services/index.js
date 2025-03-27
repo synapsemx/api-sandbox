@@ -1,3 +1,4 @@
+import { user } from './users/users.js'
 import { categories } from './categories/categories.js'
 import { comments } from './comments/comments.js'
 import { posts } from './posts/posts.js'
@@ -5,7 +6,9 @@ import { relatedPost } from './related-post/related-post.js'
 import { tagPost } from './tag-post/tag-post.js'
 import { tags } from './tags/tags.js'
 
-export const services = (app) => {
+export const services = app => {
+  app.configure(user)
+
   app.configure(categories)
 
   app.configure(comments)

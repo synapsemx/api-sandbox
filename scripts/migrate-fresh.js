@@ -1,8 +1,10 @@
 import { app } from '../src/app.js'
 import { getDBClient } from '../src/utils/db.js'
 
-if (process.env.NODE_ENV !== 'test') {
-  console.error('This script can only be run in test environment')
+if (!['development', 'test'].includes(app.get('env'))) {
+  console.error(
+    'Cannot run this script outside of development or test environment'
+  )
   process.exit(1)
 }
 

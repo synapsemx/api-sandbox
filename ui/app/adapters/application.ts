@@ -8,10 +8,13 @@ import {
 } from '@ember-data/request-utils/string';
 import type { Store } from '@ember-data/store/-private/store-service';
 import type { ModelSchema } from '@ember-data/store/-types/q/ds-model';
+import config from 'ui/config/environment';
 
 const propertiesToNotCamelize = ['$joinRelation', '$whereRelation'];
 
 export default class ApplicationAdapter extends RESTAdapter {
+  host = config.APP.API_HOST;
+
   pathForType(this: MixtBuildURLMixin, modelName: string): string {
     return dasherize(pluralize(modelName));
   }

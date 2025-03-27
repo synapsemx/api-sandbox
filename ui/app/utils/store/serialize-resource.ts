@@ -34,11 +34,13 @@ const serializeResource = ({
   const serializer = getSerializerForModel(store, modelName);
   const model = store.modelFor(modelName);
 
-  if (!(model instanceof Model)) {
-    throw new Error('model must be an instance of Model.');
-  }
-
-  return serializer.normalizeResponse(store, model, payload, '', type);
+  return serializer.normalizeResponse(
+    store,
+    model as unknown as Model,
+    payload,
+    '',
+    type,
+  );
 };
 
 export default serializeResource;

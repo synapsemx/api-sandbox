@@ -1,0 +1,12 @@
+<section>
+  <h1>Posts</h1>
+
+  {{#each @model.posts as |post|}}
+    <p>
+      category:
+      {{post.category.name}}
+
+      <a href="/posts/{{post.id}}">{{post.content}}</a>
+    </p>
+  {{/each}}
+</section>

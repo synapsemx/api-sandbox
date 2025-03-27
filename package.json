@@ -32,7 +32,7 @@
   "type": "module",
   "scripts": {
     "start": "node src",
-    "dev": "nodemon src/",
+    "dev": "nodemon src/ --ignore ui/",
     "prettier": "npx prettier \"**/*.js\" --write",
     "test": "dotenv -e .env.test pnpm migrate:fresh && pnpm vitest",
     "test:ci": "pnpm migrate:fresh && pnpm vitest --coverage --silent",

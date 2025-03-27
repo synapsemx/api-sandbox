@@ -1,13 +1,14 @@
 import Model, {
   attr,
   belongsTo,
-  type AsyncBelongsTo,
   hasMany,
+  type AsyncBelongsTo,
   type AsyncHasMany,
 } from '@ember-data/model';
 import type { Type } from '@warp-drive/core-types/symbols';
 import Category from './category';
 import type Tag from './tag';
+import type Comment from './comment';
 
 export default class Post extends Model {
   declare [Type]: 'post';
@@ -17,6 +18,9 @@ export default class Post extends Model {
 
   @hasMany<Tag>('tag', { async: true, inverse: null })
   declare tags: AsyncHasMany<Tag>;
+
+  @hasMany<Comment>('comment', { async: true, inverse: 'post' })
+  declare comments: AsyncHasMany<Comment>;
 
   @attr('string') declare content: string;
 }

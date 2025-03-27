@@ -7,8 +7,8 @@ import Model, {
 } from '@ember-data/model';
 import type { Type } from '@warp-drive/core-types/symbols';
 import Category from './category';
-import type Tag from './tag';
 import type Comment from './comment';
+import type Tag from './tag';
 
 export default class Post extends Model {
   declare [Type]: 'post';

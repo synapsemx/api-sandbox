@@ -1,5 +1,12 @@
 {{page-title "Ui"}}
 
-<h2 id="title">Welcome to Ember</h2>
+<header
+  class="container mx-auto flex items-center gap-4 text-lg font-bold py-8 px-6"
+>
+  <LinkTo @route="categories">Categories</LinkTo>
+  <LinkTo @route="posts">Posts</LinkTo>
+</header>
 
-{{outlet}}
+<main class="container mx-auto px-6">
+  {{outlet}}
+</main>

@@ -29,7 +29,11 @@ export default class ApplicationSerializer extends RESTSerializer {
     return underscore(key);
   }
 
-  keyForRelationship(key: string): string {
+  keyForRelationship(key: string, typeClass: string): string {
+    if (typeClass === 'belongsTo') {
+      return underscore(key) + '_id';
+    }
+
     return underscore(key);
   }
 

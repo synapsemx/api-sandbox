@@ -72,6 +72,28 @@ const selectRelationshipsToInclude = (
 }
 
 /**
+ * Extracts and removes inbound relationship data from the request payload.
+ * The extracted data is stored in `context.params.inboundRelationshipsToProcess`
+ * and removed from `context.data`.
+ *
+ * @param {HookContext} context
+ * @param {RelationshipsMap} availableRelationships
+ */
+export const getInboundRelationships = (context, availableRelationships) => {
+  const payload = context.data || {}
+
+  return Object.keys(availableRelationships).reduce((inbound, key) => {
+    if (!(key in payload)) return inbound
+
+    inbound[key] = payload[key]
+
+    delete context.data[key]
+
+    return inbound
+  }, {})
+}
+
+/**
  * Hook to process the `$include` query param and determine which relationships
  * should be eagerly loaded (appended) in the response. The resolved relationships
  * are stored in `context.params.includeRelationships`.
@@ -82,6 +104,13 @@ const selectRelationshipsToInclude = (
 const processIncludeQuery = (context) => {
   const requestedRelationships = parseIncludeQueryParam(context)
   const definedRelationships = getServiceRelationships(context)
+
+  if (context.method === 'patch' || context.method === 'create') {
+    context.params.inboundRelationshipsToProcess = getInboundRelationships(
+      context,
+      definedRelationships
+    )
+  }
 
   if (requestedRelationships.length) {
     assertValidRelationships(requestedRelationships, definedRelationships)

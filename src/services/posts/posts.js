@@ -2,6 +2,7 @@
 
 import { hooks as schemaHooks } from '@feathersjs/schema'
 import includeRelationships from '../../hooks/include-relationships/index.js'
+import processRelationships from '../../hooks/process-relationships/index.js'
 import { PostsService, getOptions } from './posts.class.js'
 import {
   postsDataResolver,
@@ -58,7 +59,8 @@ export const posts = (app) => {
       remove: []
     },
     after: {
-      all: [includeRelationships]
+      all: [includeRelationships],
+      create: [processRelationships]
     },
     error: {
       all: []

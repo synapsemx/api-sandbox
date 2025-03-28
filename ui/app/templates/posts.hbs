@@ -1,12 +1,32 @@
-<section>
-  <h1>Posts</h1>
+{{page-title "Posts"}}
 
-  {{#each @model.posts as |post|}}
-    <p>
-      category:
-      {{post.category.name}}
+<h1 class="text-4xl font-extrabold">
+  Posts
+</h1>
 
-      <a href="/posts/{{post.id}}">{{post.content}}</a>
-    </p>
+<div
+  {{did-insert (perform this.findResources)}}
+  {{did-update (perform this.findResources)}}
+  class="mt-8 grid gap-y-6"
+>
+  {{#each this.resources as |resource|}}
+    <article>
+      <h3 class="text-lg semibold">
+        Category:
+        {{resource.category.name}}
+      </h3>
+
+      <ul class="flex flex-wrap gap-x-2 text-sm">
+        {{#each resource.tags as |tag|}}
+          <li>
+            {{tag.name}}
+          </li>
+        {{/each}}
+      </ul>
+
+      <p>
+        {{resource.content}}
+      </p>
+    </article>
   {{/each}}
-</section>
+</div>

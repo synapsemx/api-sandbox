@@ -22,6 +22,7 @@ export default abstract class ResourceController<
   findResources = task({ drop: true }, async (): Promise<void> => {
     const resources = await this.store.query<T>(this.modelType, {
       $include: this.relationshipToInclude,
+      $limit: 9999,
     });
 
     this.resources = [...resources];

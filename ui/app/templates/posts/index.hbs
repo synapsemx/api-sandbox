@@ -1,8 +1,16 @@
 {{page-title "Posts"}}
 
-<h1 class="text-4xl font-extrabold">
-  Posts
-</h1>
+<div class="flex items-center justify-between">
+  <h1 class="text-4xl font-extrabold">
+    Posts
+  </h1>
+
+  <LinkTo @route="posts.new">
+    <Button>
+      Create
+    </Button>
+  </LinkTo>
+</div>
 
 <div
   {{did-insert (perform this.findResources)}}

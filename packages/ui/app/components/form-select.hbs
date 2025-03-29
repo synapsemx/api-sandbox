@@ -1,0 +1,13 @@
+<select class="px-4 py-2 border border-gray-300 rounded-md" ...attributes>
+  <option value="" disabled selected>
+    {{@placeholder}}
+  </option>
+  {{#each @options as |optionItem|}}
+    <option
+      value="{{optionItem.value}}"
+      selected={{this.isSelected optionItem}}
+    >
+      {{optionItem.label}}
+    </option>
+  {{/each}}
+</select>

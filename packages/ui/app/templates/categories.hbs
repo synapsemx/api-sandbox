@@ -1,0 +1,29 @@
+{{page-title "Categories"}}
+
+<h1 class="text-4xl font-extrabold">
+  Categories
+</h1>
+
+{{#if this.newResource}}
+  <div class="mt-8 flex items-center gap-x-4">
+    <FormInput @type="text" @value={{this.newResource.name}} />
+
+    <Button type="submit" {{on "click" (perform this.createResource)}}>
+      Save
+    </Button>
+  </div>
+{{/if}}
+
+<div
+  {{did-insert (perform this.findResources)}}
+  {{did-update (perform this.findResources)}}
+  class="mt-8"
+>
+  {{#each this.resources as |resource|}}
+    <article>
+      <h3>
+        {{resource.name}}
+      </h3>
+    </article>
+  {{/each}}
+</div>

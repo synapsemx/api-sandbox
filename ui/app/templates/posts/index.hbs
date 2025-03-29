@@ -18,21 +18,24 @@
   class="mt-8 grid gap-y-6"
 >
   {{#each this.resources as |resource|}}
-    <article>
-      <h3 class="text-lg semibold">
+    <article
+      data-test-resource-type="post"
+      data-test-resource-id={{resource.id}}
+    >
+      <h3 class="text-lg semibold" data-test-relationship-type="category">
         Category:
         {{resource.category.name}}
       </h3>
 
       <ul class="flex flex-wrap gap-x-2 text-sm">
         {{#each resource.tags as |tag|}}
-          <li>
+          <li data-test-relationship-type="tag">
             {{tag.name}}
           </li>
         {{/each}}
       </ul>
 
-      <p>
+      <p data-test-attribute="content">
         {{resource.content}}
       </p>
     </article>
